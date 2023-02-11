@@ -1,0 +1,37 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #f5f5f5;
+}
+
+.form-sign {
+  max-width: 330px;
+  padding: 15px;
+}
+
+.form-sign .form-floating:focus-within {
+  z-index: 2;
+}
+
+.form-signin input[type="password"]{
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.btn-sign{
+  color:white;
+  background-color: #8C122A;
+  border-color: #8C122A;
+}
+.btn-sign:hover{
+  color:#8C122A;
+  background-color: lightgray;
+  border-color: lightgray;
+}
