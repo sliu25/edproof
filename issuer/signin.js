@@ -100,6 +100,61 @@ let issuedCredential ={
     }
   }]
 }
+function getIssuedCredential(){
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", "Bearer "+sessionStorage.getItem("issuer_access_token"));
+  
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
+  
+  fetch("https://backend.stacked.itdg.io/api/issuer/get-all-issued-credential/"+sessionStorage.getItem("issuer_id"), requestOptions)
+    .then(response => response.json())
+    .then(result => {
+        let table=[]; 
+        for (let j of ["AcademicTranscriptCredential","StudentIDCredential"]){
+          if (JSON.stringify(result[j])!='[]'){
+              for (let x of result[j]){
+                  if (JSON.parse(x.data).institution!="The Lawrenceville School") continue;
+                  table.push(x);
+              }
+          }
+        } 
+        sessionStorage.setItem("issued_credential",JSON.stringify(table)); 
+        window.location.assign("dashboard.html");
+      }
+    )
+    .catch(error => console.log('error', error));
+}
+function getRequestCredential(){
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", "Bearer "+sessionStorage.getItem("issuer_access_token"));
+
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
+
+  fetch("https://backend.stacked.itdg.io/api/issuer/get-all-requested-credential/"+sessionStorage.getItem("issuer_id"), requestOptions)
+    .then(response => response.json())
+    .then(result => {
+      let table=[]; 
+      for (let j of ["AcademicTranscriptCredential","StudentIDCredential"]){
+        if (JSON.stringify(result[j])!='[]'){
+            for (let x of result[j]){
+              if (JSON.parse(x.data).institution!="The Lawrenceville School") continue;
+                table.push(x);
+            }
+        }
+      } 
+      sessionStorage.setItem("requested_credential",JSON.stringify(table)); 
+      getIssuedCredential();
+    })
+    .catch(error => console.log('error', error));
+}
 function signIn(){
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -121,29 +176,11 @@ function signIn(){
       .then(response => response.json())
       .then(result => {
         console.log(JSON.stringify(result));
-        if (result.code === 200){
-            sessionStorage.setItem("issuer_access_token",JSON.stringify(result.data.access_token).substring(1,JSON.stringify(result.data.access_token).length-1));
+        if (result.code===200){
+          sessionStorage.setItem("issuer_access_token",JSON.stringify(result.data.access_token).substring(1,JSON.stringify(result.data.access_token).length-1));
             sessionStorage.setItem("issuer_email",JSON.stringify(result.data.user_details.email).substring(1,JSON.stringify(result.data.user_details.email).length-1));
             sessionStorage.setItem("issuer_id",JSON.stringify(result.data.user_details.id).substring(1,JSON.stringify(result.data.user_details.id).length-1));
-            console.log(sessionStorage.getItem("issuer_access_token"),sessionStorage.getItem("issuer_email"),sessionStorage.getItem("issuer_id"));   
-            let table=[], issuedtable=[]; //will be substituded with API and will be moved to home screen instead
-            for (let j of ["Student ID Credential","Graduation Credential"]){
-              if (JSON.stringify(credential[j])!='[]'){
-                  for (let x of credential[j]){
-                      table.push(x);
-                  }
-              }
-              if (JSON.stringify(issuedCredential[j])!='[]'){
-                for (let x of issuedCredential[j]){
-                  issuedtable.push(x);
-                }
-              }
-            } 
-            sessionStorage.setItem("issuerCredentialTable",JSON.stringify(table));    
-            sessionStorage.setItem("issuedCredentialTable",JSON.stringify(issuedtable));    
-            window.location.assign("dashboard.html");
-        }else{
-            alert('error');
+          getRequestCredential();
         }
       })
       .catch(error => console.log('error', error));

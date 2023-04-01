@@ -1,7 +1,8 @@
 let credentialschema = {
-    "Student ID Credential":["First Name","Last Name","Institution","Expiration Date","Student ID"],
-    "Graduation Credential" : ["First Name","Last Name","Institution","House Affiliation","Graduation Year"]
+    "Student ID Credential":["First Name","Last Name","Institution","Expiration Date","Student Id"],
+    "Graduation Credential" : ["First Name","Last Name","Institution","House Affiliation","Student Id","Graduation Year"]
 }
+let dic = {"Student ID Credential":"StudentIDCredential", "Graduation Credential":"GraduationCredential"};
 let counter=0;
 function getAllCredentialSchema(){
     var myHeaders = new Headers();
@@ -25,7 +26,7 @@ function createSchema(){
         const clone = box.cloneNode(true); // true means clone all childNodes and all event handlers
         clone.setAttribute("id", "credentialschema " +counter);
         clone.setAttribute("data-detail", JSON.stringify(credentialschema[x]));
-        clone.setAttribute("data-name", x);
+        clone.setAttribute("data-name", dic[x]);
         clone.querySelector("#cardtitle").setAttribute("id", "cardtitle " + counter);
         clone.querySelector("#cardimage").setAttribute("id", "cardimage " + counter);
         document.getElementById("credentialschemaList").appendChild(clone);

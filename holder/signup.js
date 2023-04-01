@@ -42,10 +42,13 @@ function signUp() {
   fetch("https://oauth.artemis.stacked.itdg.io/api/auth/signup", requestOptions)
     .then((response) => response.json())
     .then((result) => {
-      alert(JSON.stringify(result)); 
-      if (Object.keys(result)[0]!=="error") {
-        window.location.assign("signin.html");
-      }
+      console.log(JSON.stringify(result))
+      //alert(JSON.stringify(result)); //double check
+      sessionStorage.setItem("access_token",JSON.stringify(result.data.access_token).slice(1,-1));
+      sessionStorage.setItem("user_email",JSON.stringify(result.data.user_details.email).slice(1,-1));
+      sessionStorage.setItem("user_id",JSON.stringify(result.data.user_details.id).slice(1,-1));
+      console.log(sessionStorage.getItem("access_token"),sessionStorage.getItem("user_email"),sessionStorage.getItem("user_id"));          
+      window.location.assign("seed.html");
     })
     .catch((error) => alert("error", error));
 }

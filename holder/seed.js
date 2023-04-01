@@ -1,5 +1,37 @@
-function sign(){
-  let credential = {
+function createAuthenticationDID(){
+  if (document.getElementById("floatingSeed").value!=document.getElementById("floatingConfirmSeed").value){
+    alert('error');
+    return;
+  }
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", "Bearer "+ sessionStorage.getItem("access_token"));
+  myHeaders.append("Content-Type", "application/json");
+  
+  var raw = JSON.stringify({
+    "holderId": sessionStorage.getItem("user_id"),
+    "email": sessionStorage.getItem("user_email"),
+    "secret": document.getElementById("floatingSeed").value,
+  });
+  
+  var requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  };
+  
+  fetch("https://backend.stacked.itdg.io/api/holder/create-authentication-did", requestOptions)
+    .then(response => response.json())
+    .then(result => {
+      console.log(JSON.stringify(result));
+      if (result.code === 200){
+          window.location.assign("firstid.html");
+      }else{
+          alert('error');
+      }
+  })
+    .catch(error => console.log('error', error));
+  /*let credential = {
     "Academic Transcript Credential":[],
     "Vaccination Credential":[],
     "Student ID Credential":[
@@ -39,7 +71,7 @@ function sign(){
         }
       }
     ],
-    "Graduation Credential":[/*{
+    "Graduation Credential":[{
       "credentialId":"9cde5fd8-13cf-4922-886a-2622301bee83",
       "credentialSource":"Issued",
       "issuerOrganization":"The Lawrenceville School",
@@ -56,10 +88,10 @@ function sign(){
         "House Affiliation": "Haskell",
         "Email": "swsliu07@gmail.com"
       }
-    }*/]
-  }
-  sessionStorage.setItem("all_credential",JSON.stringify(credential)); //will be replaced with real API and move to home screen
-  window.location.assign("credential.html");
+    }]
+  }*/
+  //sessionStorage.setItem("all_credential",JSON.stringify(credential)); //will be replaced with real API and move to home screen
+  //window.location.assign("credential.html");
   /*document.getElementById("signBtn").onclick = function (){
     var myHeaders = new Headers();
     myHeaders.append("Authorization", "Bearer "+ sessionStorage.getItem("access_token"));

@@ -19,12 +19,17 @@ body {
 .form-sign .form-floating:focus-within {
   z-index: 2;
 }
-
-.form-signin input[type="password"]{
+#floatingSeed{
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+#floatingConfirmSeed{
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
 .btn-sign{
   color:white;
   background-color: #8C122A;

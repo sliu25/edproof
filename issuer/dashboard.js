@@ -1,4 +1,4 @@
-let credential = JSON.parse(sessionStorage.getItem("issuerCredentialTable")); 
+let credential = JSON.parse(sessionStorage.getItem("requested_credential")); 
 let table = [];
 $(document).ready(function () {
   var t = $('#dataTable').DataTable({
@@ -9,7 +9,7 @@ $(document).ready(function () {
   }); 
   let counter=0;
   for (x of credential){
-    t.row.add([x.data["First Name"] + ' ' + x.data["Last Name"], x.data["Email"], x.credentialType, x.createdAt, counter]).draw(false);
+    t.row.add([JSON.parse(x.data).firstName + ' ' + JSON.parse(x.data).lastName, x.email, x.credentialType, x.createdAt, counter]).draw(false);
     counter++;
   }
   /*for (let j of ["Student ID Credential","Graduation Credential"]){
@@ -25,6 +25,7 @@ $(document).ready(function () {
   $("#dataTable tbody tr").css('cursor', 'pointer');
   $('#dataTable tbody').on('click', 'tr', function () {
       var data = t.row(this).data();
+      console.log(data[4]);
       sessionStorage.setItem("selectedRow",data[4]);
       window.location.assign("detail.html");
   });

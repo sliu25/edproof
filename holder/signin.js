@@ -1,3 +1,22 @@
+function getallcredential(){
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", "Bearer "+sessionStorage.getItem("access_token"));
+  
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
+  
+  fetch("https://backend.stacked.itdg.io/api/holder/get-all-credential/"+sessionStorage.getItem("user_id"), requestOptions)
+    .then(response => response.json())
+    .then(result => {
+      console.log(JSON.stringify(result));
+      sessionStorage.setItem("all_credential",JSON.stringify(result));
+      window.location.assign("credential.html");
+    })
+    .catch(error => console.log('error', error));
+}
 function signIn(){
   var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -17,13 +36,12 @@ function signIn(){
     fetch("https://oauth.artemis.stacked.itdg.io/api/auth/login-by-email/", requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log(JSON.stringify(result));
         if (result.code === 200){
-            sessionStorage.setItem("access_token",JSON.stringify(result.data.access_token));
-            sessionStorage.setItem("user_email",JSON.stringify(result.data.user_details.email).substring(1,JSON.stringify(result.data.user_details.email).length-1));
-            sessionStorage.setItem("user_id",JSON.stringify(result.data.user_details.id));
-            console.log(sessionStorage.getItem("access_token"),sessionStorage.getItem("user_email"),sessionStorage.getItem("user_id"));          
-            window.location.assign("seed.html");
+            sessionStorage.setItem("access_token",JSON.stringify(result.data.access_token).slice(1,-1));
+            sessionStorage.setItem("user_email",JSON.stringify(result.data.user_details.email).slice(1,-1));//.substring(1,JSON.stringify(result.data.user_details.email).length-1))
+            sessionStorage.setItem("user_id",JSON.stringify(result.data.user_details.id).slice(1,-1));
+            //console.log(sessionStorage.getItem("access_token"),sessionStorage.getItem("user_email"),sessionStorage.getItem("user_id"));          
+            getallcredential();
         }else{
             alert('error');
         }

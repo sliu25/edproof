@@ -1,11 +1,52 @@
-let credentialschema = {
-    "Student ID Credential":["First Name","Last Name","Institution","Expiration Date","Student ID"],
-    "Graduation Credential" : ["First Name","Last Name","Institution","House Affiliation","Graduation Year"]
-}
+/*let credentialschema = {
+    "Student ID Credential":["First Name","Last Name","Institution","Expiration Date","Student Id"],
+    "Graduation Credential" : ["First Name","Last Name","Institution","House Affiliation","Date Of Issuance"]
+}*/
+let dic = {"StudentIDCredential":"Student ID Credential", "GraduationCredential":"Graduation Credential"}
 let selected_schema = JSON.parse(sessionStorage.getItem("selected_credential_schema"));
 let schemaname = sessionStorage.getItem("selected_credential_schema_name");
+function camel2title(camelCase) {
+  // no side-effects
+  return camelCase
+    // inject space before the upper case letters
+    .replace(/([A-Z])/g, function(match) {
+       return " " + match;
+    })
+    // replace first char with upper case
+    .replace(/^./, function(match) {
+      return match.toUpperCase();
+    });
+}
+function camelCase(str) {
+  return str
+      .replace(/\s(.)/g, function(a) {
+          return a.toUpperCase();
+      })
+      .replace(/\s/g, '')
+      .replace(/^(.)/, function(b) {
+          return b.toLowerCase();
+      });
+}
+function getallcredential(){
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", "Bearer "+sessionStorage.getItem("access_token"));
+  
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
+  
+  fetch("https://backend.stacked.itdg.io/api/holder/get-all-credential/"+sessionStorage.getItem("user_id"), requestOptions)
+    .then(response => response.json())
+    .then(result => {
+      sessionStorage.setItem("all_credential",JSON.stringify(result));
+      window.location.assign("credential.html");
+    })
+    .catch(error => console.log('error', error));
+}
 function create_fields(){
-    document.getElementById("cardhead").innerHTML = schemaname;
+    document.getElementById("cardhead").innerHTML = dic[schemaname];
     document.getElementById("cardsubtitle").innerHTML = "Please fill in the attributes for generating your "+schemaname.toLowerCase()+'.';
     for (let x of selected_schema){
         const box = document.getElementById("inputfield");
@@ -33,31 +74,39 @@ function create_credential(){
     myHeaders.append("Content-Type", "application/json");
     var credentialdata = {}
     for (x of selected_schema){
-        credentialdata[x] = document.getElementById(x + 2).value;
+        if (x=="House Affiliation") continue;
+        if (x=="Graduation Year"){
+           credentialdata["dateOfIssuance"] = document.getElementById("Graduation Year" + 2).value;
+           continue;
+        }
+        credentialdata[camelCase(x)] = document.getElementById(x + 2).value;
     }
     var raw = JSON.stringify({
       "holderId": sessionStorage.getItem("user_id"),
       "email": sessionStorage.getItem("user_email"),
-      "secret": document.getElementById("Seed2"),
-      "credentialType": schemaname.split(" ").join(""), //may need to update string format
-      "issuerName": "The Lawrenceville School",
+      "secret": document.getElementById("Seed2").value,
+      "credentialType": (schemaname.split(" ").join("")=="GraduationCredential")?"AcademicTranscriptCredential":schemaname.split(" ").join(""), //may need to update string format
+      "issuerName": "THEi",
       "credentialData": JSON.stringify(credentialdata), //might need to change format as well
     });
-    
-    /*
+    console.log(raw);
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
       body: raw,
       redirect: 'follow'
     };
-    
     fetch("https://backend.stacked.itdg.io/api/holder/create-credential", requestOptions)
-      .then(response => response.text())
-      .then(result => console.log(result))
+      .then(response => response.json())
+      .then(result => {
+        console.log(JSON.stringify(result));
+        if (result.status==true){
+          getallcredential();
+        }
+      })
       .catch(error => console.log('error', error));
-    */
-    credentialdata.Email = sessionStorage.getItem("user_email");
+
+    /*credentialdata.Email = sessionStorage.getItem("user_email");
     let today = new Date();
     let todaydate = today.toISOString().substring(0,10);
     let credentialall = JSON.parse(sessionStorage.getItem("all_credential"));
@@ -77,5 +126,5 @@ function create_credential(){
     credentialall = JSON.parse(sessionStorage.getItem("issuerCredentialTable"));
     credentialall.push(credentialsample);
     sessionStorage.setItem("issuerCredentialTable", JSON.stringify(credentialall));
-    console.log(sessionStorage.getItem("issuerCredentialTable"));
+    console.log(sessionStorage.getItem("issuerCredentialTable"));*/
 }
