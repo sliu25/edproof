@@ -1,6 +1,6 @@
 let text = "";
-let index = parseInt(sessionStorage.getItem("selectedIssuedRow"));
-let credential = JSON.parse(sessionStorage.getItem("issued_credential"))[index];
+let index = parseInt(sessionStorage.getItem("selectedRequestRow"));
+let credential = JSON.parse(sessionStorage.getItem("received_credential"))[index];
 let dic = {"AcademicTranscriptCredential":"Academic Transcript Credential", "StudentIDCredential":"Student ID Credential"};
 
 function camel2title(camelCase) {
@@ -16,7 +16,7 @@ function camel2title(camelCase) {
       });
 }
 function load_detail(){
-    document.getElementById("user_name").textContent  = "The Lawrenceville School";
+    document.getElementById("user_name").textContent  = "University";
     for (let x in JSON.parse(credential.data)){
         if (x!="Institution"){
             let para = document.createElement("p");

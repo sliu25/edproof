@@ -15,6 +15,7 @@ function camel2title(camelCase) {
 }
 
 function load_detail(){
+  document.getElementById("user_name").textContent  = sessionStorage.getItem("user_email");
     for (let x in JSON.parse(credential.data)){
         let para = document.createElement("p");
         para.innerHTML = "<b>" + camel2title(x) + "</b>"+": " + JSON.parse(credential["data"])[x];
@@ -22,4 +23,7 @@ function load_detail(){
     }
     document.getElementById("cardhead").innerHTML = dic[credential.credentialType];
     document.getElementById("status").innerHTML = credential.credentialSource;
+    if (document.getElementById("status").innerHTML =="self"){
+      document.getElementById("flag").style.color = "yellow";
+    }
 }

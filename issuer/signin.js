@@ -178,7 +178,7 @@ function signIn(){
         console.log(JSON.stringify(result));
         if (result.code===200){
           sessionStorage.setItem("issuer_access_token",JSON.stringify(result.data.access_token).substring(1,JSON.stringify(result.data.access_token).length-1));
-            sessionStorage.setItem("issuer_email",JSON.stringify(result.data.user_details.email).substring(1,JSON.stringify(result.data.user_details.email).length-1));
+            sessionStorage.setItem("issuer_email",JSON.stringify(result.data.user_details.user_name).substring(1,JSON.stringify(result.data.user_details.user_name).length-1));
             sessionStorage.setItem("issuer_id",JSON.stringify(result.data.user_details.id).substring(1,JSON.stringify(result.data.user_details.id).length-1));
           getRequestCredential();
         }

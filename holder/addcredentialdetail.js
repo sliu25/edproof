@@ -46,6 +46,7 @@ function getallcredential(){
     .catch(error => console.log('error', error));
 }
 function create_fields(){
+  document.getElementById("user_name").textContent  = sessionStorage.getItem("user_email");
     document.getElementById("cardhead").innerHTML = dic[schemaname];
     document.getElementById("cardsubtitle").innerHTML = "Please fill in the attributes for generating your "+schemaname.toLowerCase()+'.';
     for (let x of selected_schema){

@@ -1,7 +1,7 @@
-let credential = JSON.parse(sessionStorage.getItem("issued_credential")); 
+let credential = JSON.parse(sessionStorage.getItem("received_credential")); 
 let table = [];
 $(document).ready(function () {
-document.getElementById("user_name").textContent  = "The Lawrenceville School";
+document.getElementById("user_name").textContent  = "University";
   var t = $('#dataTable').DataTable({
         order: [[3, 'desc']],
         columnDefs: [
@@ -11,7 +11,8 @@ document.getElementById("user_name").textContent  = "The Lawrenceville School";
   let counter=0;
   //console.log(sessionStorage.getItem("issuedCredentialTable"))
   for (let x of credential){
-    t.row.add([JSON.parse(x.data).firstName + ' ' + JSON.parse(x.data).lastName, x.email, x.credentialType, x.issuedDate.substring(0, 10), counter]).draw(false);
+    if (x.email=="swsliu07@gmail.com")
+    t.row.add([JSON.parse(x.data).firstName + ' ' + JSON.parse(x.data).lastName, x.email, x.credentialType, x.receivedDate.substring(0, 10), counter]).draw(false);
     counter++;
   }
   /*for (let j of ["Student ID Credential","Graduation Credential"]){
@@ -27,7 +28,7 @@ document.getElementById("user_name").textContent  = "The Lawrenceville School";
   $("#dataTable tbody tr").css('cursor', 'pointer');
   $('#dataTable tbody').on('click', 'tr', function () {
       var data = t.row(this).data();
-      sessionStorage.setItem("selectedIssuedRow",data[4]);
-      window.location.assign("issueddetail.html");
+      sessionStorage.setItem("selectedRequestRow",data[4]);
+      window.location.assign("viewrequestdetail.html");
   });
 });

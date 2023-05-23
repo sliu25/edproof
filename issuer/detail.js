@@ -71,6 +71,8 @@ function getRequestCredential(){
 }
 
 function load_detail(){
+  
+  document.getElementById("user_name").textContent  = "The Lawrenceville School";
     for (let x in JSON.parse(credential.data)){
         if (x!="Institution"){
             let para = document.createElement("p");
@@ -80,6 +82,9 @@ function load_detail(){
     }
     document.getElementById("cardhead").innerHTML = dic[credential.credentialType];
     document.getElementById("status").innerHTML = credential.credentialSource;
+    if (document.getElementById("status").innerHTML =="self"){
+      document.getElementById("flag").style.color = "yellow";
+    }
 }
 function accept(){
     var myHeaders = new Headers();

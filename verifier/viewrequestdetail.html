@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Credential Details</title>
+    <title>Credential Request Detail</title>
 
     <!-- Custom fonts for this template-->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -19,7 +19,7 @@
 
     <!-- Custom styles for this template-->
     <link href="common.css" rel="stylesheet">
-    <script type="text/javascript" src="detail.js"></script>
+    <script type="text/javascript" src="viewrequestdetail.js"></script>
 
 </head>
 
@@ -32,7 +32,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="credential.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dashboard.html">
                 <div class="sidebar-brand-icon ">
                   <img src="logo.png" height=50 width=50/>
                 </div>
@@ -43,14 +43,20 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
-                <a class="nav-link" href="credential.html">
-                    <i class="fas fa-fw fa-certificate"></i>
-                    <span>My Credentials</span></a>
+            <li class="nav-item">
+                <a class="nav-link" href="createcredentialrequest.html">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Create Request</span></a>
             </li>
 
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
+            <li class="nav-item active">
+                <a class="nav-link" href="viewrequest.html">
+                    <i class="fas fa-certificate"></i>
+                    <span>View Request</span></a>
+            </li>            
+
+
+
         </ul>
         <!-- End of Sidebar -->
 
@@ -144,7 +150,7 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <div class="mb-4">
-                        <a href="credential.html" style="text-decoration: none; color:darkgrey;">
+                        <a href="viewrequest.html" style="text-decoration: none; color:darkgrey;">
                             <i class="fas fa-arrow-left"></i>
                         </a>
                     </div>
@@ -157,6 +163,7 @@
                     </div>
 
 
+
                     <div class="row">
                         <div class="col" style="max-width:80%;">
                             <!-- Basic Card Example -->
@@ -165,9 +172,9 @@
                                     <h6 class="m-0 font-weight-bold text-primary" id="cardhead">Basic Card Example</h6>
                                 </div>
                                 <div class="card-body" id="cardbody">
-                                    
-                                </div>
+                                </div>                         
                             </div>
+                            
 
                         </div>
                     </div>

@@ -1,6 +1,7 @@
 let credential = JSON.parse(sessionStorage.getItem("requested_credential")); 
 let table = [];
 $(document).ready(function () {
+document.getElementById("user_name").textContent  = "The Lawrenceville School"; //sessionStorage.getItem("issuer_email");
   var t = $('#dataTable').DataTable({
         order: [[3, 'desc']],
         columnDefs: [
@@ -9,7 +10,7 @@ $(document).ready(function () {
   }); 
   let counter=0;
   for (x of credential){
-    t.row.add([JSON.parse(x.data).firstName + ' ' + JSON.parse(x.data).lastName, x.email, x.credentialType, x.createdAt, counter]).draw(false);
+    t.row.add([JSON.parse(x.data).firstName + ' ' + JSON.parse(x.data).lastName, x.email, x.credentialType, x.createdAt.substring(0, 10), counter]).draw(false);
     counter++;
   }
   /*for (let j of ["Student ID Credential","Graduation Credential"]){
