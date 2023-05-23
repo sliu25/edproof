@@ -1,105 +1,3 @@
-let credential ={
-  "Academic Transcript Credential":[],
-  "Vaccination Credential":[],
-  "Student ID Credential":[
-    {
-      "credentialId":"9cde5fd8-13cf-4922-886a-2622301bee83",
-      "credentialSource":"Self-Certified",
-      "issuerOrganization":"The Lawrenceville School",
-      "credentialStatus":"Valid",
-      "credentialType":"Student ID Credential",
-      "issuedDate":"2023-02-01",
-      "createdAt":"2023-01-30",
-      "updatedAt":"2023-02-01",
-      "data":{
-        "First Name": "Kevin",
-        "Last Name": "Hu",
-        "Institution": "The Lawrenceville School",
-        "Expiration Date": "2027-05-31",
-        "Student ID ": "12345678",
-        "Email": "kevin.hu@gmail.com"
-      }
-    }
-  ],
-  "Graduation Credential":[{
-    "credentialId":"077e1f54-0d1e-4d9f-a5d5-8e0b8ff6f7c2",
-    "credentialSource":"Self-Certified",
-    "issuerOrganization":"The Lawrenceville School",
-    "credentialStatus":"Valid",
-    "credentialType":"Graduation Credential",
-    "issuedDate":"2023-02-01",
-    "createdAt":"2023-01-30",
-    "updatedAt":"2023-02-01",
-    "data":{
-      "First Name": "Kevin",
-      "Last Name": "Hu",
-      "Institution": "The Lawrenceville School",
-      "Graduation Year": "2027",
-      "House Affiliation": "Haskell",
-      "Email": "kevin.hu@gmail.com"
-    }
-  }]
-}
-let issuedCredential ={
-  "Academic Transcript Credential":[],
-  "Vaccination Credential":[],
-  "Student ID Credential":[
-    {
-      "credentialId":"9cde5fd8-13cf-4922-886a-2622301bee83",
-      "credentialSource":"Issued",
-      "issuerOrganization":"The Lawrenceville School",
-      "credentialStatus":"Valid",
-      "credentialType":"Student ID Credential",
-      "issuedDate":"2023-02-01",
-      "createdAt":"2023-01-30",
-      "updatedAt":"2023-02-01",
-      "data":{
-        "First Name": "Samuel",
-        "Last Name": "Thatcher",
-        "Institution": "The Lawrenceville School",
-        "Expiration Date": "2024-05-31",
-        "Student ID": "18925462",
-        "Email": "samthatcher@gmail.com"
-      }
-    },
-    {
-      "credentialId":"9cde5fd8-13cf-4922-886a-2622301bee83",
-        "credentialSource":"Issued",
-        "issuerOrganization":"The Lawrenceville School",
-        "credentialStatus":"Valid",
-        "credentialType":"Student ID Credential",
-        "issuedDate":"2023-02-01",
-        "createdAt":"2023-01-30",
-        "updatedAt":"2023-02-01",
-        "data":{
-          "First Name": "Bob",
-          "Last Name": "Lee",
-          "Institution": "The Lawrenceville School",
-          "Expiration Date": "2025-05-31",
-          "Student ID": "16201142",
-          "Email": "swsliu07@gmail.com"
-        }
-    }
-  ],
-  "Graduation Credential":[{
-    "credentialId":"077e1f54-0d1e-4d9f-a5d5-8e0b8ff6f7c2",
-    "credentialSource":"Issued",
-    "issuerOrganization":"The Lawrenceville School",
-    "credentialStatus":"Valid",
-    "credentialType":"Graduation Credential",
-    "issuedDate":"2023-02-01",
-    "createdAt":"2021-01-30",
-    "updatedAt":"2023-02-01",
-    "data":{
-      "First Name": "Sam",
-      "Last Name": "Thatcher",
-      "Institution": "The Lawrenceville School",
-      "Graduation Year": "2024",
-      "House Affiliation": "Haskell",
-      "Email": "samthatcher@gmail.com"
-    }
-  }]
-}
 function getIssuedCredential(){
   var myHeaders = new Headers();
   myHeaders.append("Authorization", "Bearer "+sessionStorage.getItem("issuer_access_token"));
@@ -145,8 +43,8 @@ function getRequestCredential(){
       for (let j of ["AcademicTranscriptCredential","StudentIDCredential"]){
         if (JSON.stringify(result[j])!='[]'){
             for (let x of result[j]){
-              if (JSON.parse(x.data).institution!="The Lawrenceville School") continue;
-                table.push(x);
+              if (JSON.parse(x.data).institution!="The Lawrenceville School") continue;// x.issuedDate.substring(0,10)!='2023-04-07'
+              table.push(x);
             }
         }
       } 
@@ -175,7 +73,6 @@ function signIn(){
     fetch("https://oauth.artemis.stacked.itdg.io/api/auth/login-by-user-name", requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log(JSON.stringify(result));
         if (result.code===200){
           sessionStorage.setItem("issuer_access_token",JSON.stringify(result.data.access_token).substring(1,JSON.stringify(result.data.access_token).length-1));
             sessionStorage.setItem("issuer_email",JSON.stringify(result.data.user_details.user_name).substring(1,JSON.stringify(result.data.user_details.user_name).length-1));
@@ -184,4 +81,17 @@ function signIn(){
         }
       })
       .catch(error => console.log('error', error));
+}
+function load(){
+  var input = document.getElementById("floatingPassword");
+  // Execute a function when the user presses a key on the keyboard
+  input.addEventListener("keypress", function(event) {
+    // If the user presses the "Enter" key on the keyboard
+    if (event.key === "Enter") {
+      // Cancel the default action, if needed
+      event.preventDefault();
+      // Trigger the button element with a click
+      document.getElementById("signInBtn").click();
+    }
+  });
 }

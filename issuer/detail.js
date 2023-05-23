@@ -1,7 +1,7 @@
 let text = "";
 let index = parseInt(sessionStorage.getItem("selectedRow"));
 let credential = JSON.parse(sessionStorage.getItem("requested_credential"))[index];
-let dic = {"AcademicTranscriptCredential":"Academic Transcript Credential", "StudentIDCredential":"Student ID Credential"};
+let dic = {"AcademicTranscriptCredential":"Graduation Diploma", "StudentIDCredential":"Student ID Credential"};
 function camel2title(camelCase) {
   // no side-effects
   return camelCase
@@ -76,15 +76,23 @@ function load_detail(){
     for (let x in JSON.parse(credential.data)){
         if (x!="Institution"){
             let para = document.createElement("p");
-            para.innerHTML = "<b>"+camel2title(x)+"</b>" + ": " + camel2title(JSON.parse(credential.data)[x]);
+            if (x=="dateOfIssuance") para.innerHTML = "<b>"+"Graduation Date"+"</b>" + ": " + camel2title(JSON.parse(credential.data)[x]);
+            else para.innerHTML = "<b>"+camel2title(x)+"</b>" + ": " + camel2title(JSON.parse(credential.data)[x]);
             document.getElementById("cardbody").appendChild(para);
         }
     }
-    document.getElementById("cardhead").innerHTML = dic[credential.credentialType];
-    document.getElementById("status").innerHTML = credential.credentialSource;
-    if (document.getElementById("status").innerHTML =="self"){
-      document.getElementById("flag").style.color = "yellow";
+    let para = document.createElement("p");
+    para.innerHTML = "<b>"+"Issued Date"+"</b>" + ": " + credential.issuedDate.substr(0,10)+" "+credential.issuedDate.substr(11,8);
+    if (credential.credentialSource=='official'){
+      document.getElementById("credential_source").classList.remove('btn-warning');
+      document.getElementById("credential_source").classList.add('btn-success');
+    }else{
+      document.getElementById("credential_source").classList.add('btn-warning');
+      document.getElementById("credential_source").classList.remove('btn-success');
     }
+    document.getElementById("cardbody").appendChild(para);
+    document.getElementById("cardhead").innerHTML = dic[credential.credentialType];
+    document.getElementById("status").innerHTML = camel2title(credential.credentialSource);
 }
 function accept(){
     var myHeaders = new Headers();
@@ -112,36 +120,6 @@ function accept(){
         getRequestCredential();       
       })
       .catch(error => console.log('error', error));
-/*
-    //the following will be deleted when the APIs are finalized
-    let temp = JSON.parse(sessionStorage.getItem("issuerCredentialTable"));
-    console.log(JSON.stringify(temp));
-    temp.splice(index,1);
-    sessionStorage.setItem("issuerCredentialTable",JSON.stringify(temp)); //why doesn't issuer need seed
-    console.log(sessionStorage.getItem("issuerCredentialTable"));
-    let newtemp = JSON.parse(sessionStorage.getItem("issuedCredentialTable"));
-    let today = new Date();
-    let todaydate = today.toISOString().substring(0,10);
-    let newcred = {
-        "credentialId":credential.credentialId,
-        "credentialSource":"Issued",
-        "issuerOrganization":"The Lawrenceville School",
-        "credentialStatus":"Valid",
-        "credentialType": credential.credentialType,
-        "issuedDate": todaydate,
-        "createdAt": credential.createdAt,
-        "updatedAt":todaydate,
-        "data":credential.data,
-    }
-    newtemp.push(newcred);
-    console.log(JSON.stringify(newtemp));
-    sessionStorage.setItem("issuedCredentialTable",JSON.stringify(newtemp));
-    let newtemp2 = JSON.parse(sessionStorage.getItem("all_credential"));
-    newtemp2[newcred.credentialType].push(newcred);
-    sessionStorage.setItem("all_credential",JSON.stringify(newtemp2));
-    document.getElementById("successtext").style.display = "block";
-    document.getElementById("acceptbox").style.display = "none";
-    document.getElementById("rejectbox").style.display = "none";*/
 }
 function reject(){
     var myHeaders = new Headers();
@@ -149,7 +127,7 @@ function reject(){
     myHeaders.append("Content-Type", "application/json");
     
     var raw = JSON.stringify({
-      "credentialId": credential.credentialId,
+      "credentialId":  credential.id,
       "credentialType": credential.credentialType,
       "issuerId": sessionStorage.getItem("issuer_id")
     });
@@ -164,8 +142,8 @@ function reject(){
     fetch("https://backend.stacked.itdg.io/api/issuer/reject-credential", requestOptions)
       .then(response => response.json())
       .then(result => {
-        getRequestCredential();
         console.log(JSON.stringify(result))
+        getRequestCredential();
       })
       .catch(error => console.log('error', error));
       /*let temp = JSON.parse(sessionStorage.getItem("issuerCredentialTable"));

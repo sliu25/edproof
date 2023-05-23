@@ -11,7 +11,6 @@ function getallcredential(){
   fetch("https://backend.stacked.itdg.io/api/holder/get-all-credential/"+sessionStorage.getItem("user_id"), requestOptions)
     .then(response => response.json())
     .then(result => {
-      console.log(JSON.stringify(result));
       sessionStorage.setItem("all_credential",JSON.stringify(result));
       window.location.assign("credential.html");
     })
@@ -46,4 +45,17 @@ function signIn(){
             alert('error');
         }
     })
+}
+
+function load(){
+  var input = document.getElementById("floatingPassword");
+  input.addEventListener("keypress", function(event) {
+    // If the user presses the "Enter" key on the keyboard
+    if (event.key === "Enter") {
+      // Cancel the default action, if needed
+      event.preventDefault();
+      // Trigger the button element with a click
+      document.getElementById("signInBtn").click();
+    }
+  });
 }

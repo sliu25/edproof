@@ -1,8 +1,8 @@
 let credentialschema = {
     "Student ID Credential":["First Name","Last Name","Institution","Expiration Date","Student Id"],
-    "Graduation Credential" : ["First Name","Last Name","Institution","House Affiliation","Student Id","Graduation Year"]
+    "Graduation Diploma" : ["First Name","Last Name","Institution","Student Id","Graduation Date"] //house affiliation
 }
-let dic = {"Student ID Credential":"StudentIDCredential", "Graduation Credential":"GraduationCredential"};
+let dic = {"Student ID Credential":"StudentIDCredential", "Graduation Diploma":"GraduationDiploma"};
 let counter=0;
 function getAllCredentialSchema(){
     var myHeaders = new Headers();

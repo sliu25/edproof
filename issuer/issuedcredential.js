@@ -1,5 +1,6 @@
 let credential = JSON.parse(sessionStorage.getItem("issued_credential")); 
 let table = [];
+let dic = {"AcademicTranscriptCredential":"Graduation Diploma", "StudentIDCredential":"Student ID Credential"};
 $(document).ready(function () {
 document.getElementById("user_name").textContent  = "The Lawrenceville School";
   var t = $('#dataTable').DataTable({
@@ -11,7 +12,7 @@ document.getElementById("user_name").textContent  = "The Lawrenceville School";
   let counter=0;
   //console.log(sessionStorage.getItem("issuedCredentialTable"))
   for (let x of credential){
-    t.row.add([JSON.parse(x.data).firstName + ' ' + JSON.parse(x.data).lastName, x.email, x.credentialType, x.issuedDate.substring(0, 10), counter]).draw(false);
+    t.row.add([JSON.parse(x.data).firstName + ' ' + JSON.parse(x.data).lastName, x.email, dic[x.credentialType], x.issuedDate.substr(0,10)+" "+x.issuedDate.substr(11,8), counter]).draw(false);
     counter++;
   }
   /*for (let j of ["Student ID Credential","Graduation Credential"]){

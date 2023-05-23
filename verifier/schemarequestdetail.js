@@ -12,14 +12,14 @@ let credentialtemplate = {
         "First Name": "Example First Name",
         "Last Name": "Example Last Name",
         "Institution": "Example School",
-        "Date of Issuance": "YYYY-MM-DD",
-        "House Affiliation": "Example House",
+        "Student Id":"XXXXXX",
+        "Graduation Date": "YYYY-MM-DD"
     },
 };
 let text = "";
 let dic = {
   "StudentIDCredential": "Student ID Credential",
-  "AcademicTranscriptCredential": "Graduation Credential",
+  "AcademicTranscriptCredential": "Graduation Diploma",
 };
 let credential = credentialtemplate[sessionStorage.getItem("verifier_selected_credential_schema_name")];
 function camel2title(camelCase) {
@@ -41,12 +41,7 @@ function load_detail() {
   document.getElementById("user_name").textContent  = "University";
   for (let x in credential) {
     let para = document.createElement("p");
-    para.innerHTML =
-      "<b>" +
-      camel2title(x) +
-      "</b>" +
-      ": " +
-      credential[x];
+    para.innerHTML =  "<b>" +  x +  "</b>" +  ": " +  credential[x];
     document.getElementById("cardbody").appendChild(para);
   }
   document.getElementById("cardhead").innerHTML =    dic[sessionStorage.getItem("verifier_selected_credential_schema_name")];

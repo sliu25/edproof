@@ -1,22 +1,23 @@
+let dic = {"StudentIDCredential":"Student ID Credential", "AcademicTranscriptCredential":"Graduation Diploma"}
 function credential_list(){
     let credential = JSON.parse(sessionStorage.getItem("all_credential")), counter=1;
     //console.log(JSON.stringify(credential));
-    let dic = {"StudentIDCredential":"Student ID Credential", "AcademicTranscriptCredential":"Graduation Credential"}
     for (let j of ["Student ID Credential","Academic Transcript Credential"]){
         if (j.split(" ").join("")!=JSON.parse(sessionStorage.getItem("verificationRequestDetail")).verificationRequest.credentialType){
             continue;
         }
         if (JSON.stringify(credential[j.split(" ").join("")])!==undefined){
         for (let x of credential[j.split(" ").join("")]){
-            if (JSON.parse(x.data).firstName=="sophia") continue;
+            //if (JSON.parse(x.data).firstName=="sophia") continue;
+            if (new Date(x.issuedDate)<new Date('2023-05-05T14:43:18.000Z')) continue;
             var k = document.getElementById("select_list");
             var option = document.createElement("option");
             option.value = counter;
             option.setAttribute('value', JSON.stringify({"id":x.id, "credentialtype":x.credentialType}));
             if (j=="Student ID Credential") {
-                option.text = j + " - " + JSON.parse(x.data).institution + " : " + JSON.parse(x.data).studentId + ' ('+ JSON.parse(x.data).expirationDate+') [' + x.credentialSource+']';
+                option.text = j + " [" +x.credentialSource+"]"+" - " + JSON.parse(x.data).institution + " ( " + JSON.parse(x.data).studentId+' ) - ' + x.issuedDate.substr(0,10)+" "+x.issuedDate.substr(11,8);
             }else{
-                option.text= j + " - " + JSON.parse(x.data).institution + " : " + JSON.parse(x.data).dateOfIssuance;
+                option.text= "Graduation Diploma" + " [" +x.credentialSource+"]"+" - " + JSON.parse(x.data).institution + "- " + x.issuedDate.substr(0,10)+" "+x.issuedDate.substr(11,8);
             }
             k.add(option);
         }
@@ -58,8 +59,8 @@ function show_request_by_code(){
             window.location.assign("credential.html");
         }else{
             sessionStorage.setItem("verificationRequestDetail", JSON.stringify(result));
-            document.getElementById("organization").innerHTML = result.verificationRequest.verifierName
-            document.getElementById("schema").innerHTML = result.verificationRequest.credentialType    
+            document.getElementById("organization").innerHTML = "University";//result.verificationRequest.verifierName;
+            document.getElementById("schema").innerHTML = dic[result.verificationRequest.credentialType];    
             credential_list();
         }        
       })
